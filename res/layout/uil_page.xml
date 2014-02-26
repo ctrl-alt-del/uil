@@ -50,6 +50,14 @@
                 android:layout_weight="1"
                 android:text="@string/dummy_button" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/action_01"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open Camera" />
+
     </FrameLayout>
 
 </FrameLayout>
