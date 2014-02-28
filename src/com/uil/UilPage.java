@@ -24,7 +24,9 @@ import android.widget.Button;
  * 
  * @see SystemUiHider
  */
-public class UilPage extends Activity implements View.OnClickListener {
+public class UilPage extends Activity implements 
+View.OnClickListener,
+SystemUiHider.OnVisibilityChangeListener {
 	/**
 	 * Whether or not the system UI should be auto-hidden after
 	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -57,6 +59,8 @@ public class UilPage extends Activity implements View.OnClickListener {
 	private Context context;
 	private PackageManager packageManager;
 
+	private View controlsView, contentView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,8 +72,8 @@ public class UilPage extends Activity implements View.OnClickListener {
 		this.packageManager = this.context.getPackageManager();
 
 
-		final View controlsView = findViewById(R.id.fullscreen_content_controls);
-		final View contentView = findViewById(R.id.fullscreen_content);
+		this.controlsView = findViewById(R.id.fullscreen_content_controls);
+		this.contentView = findViewById(R.id.fullscreen_content);
 
 		final Button openCamera = (Button) super.findViewById(R.id.action_01);
 
@@ -80,53 +84,11 @@ public class UilPage extends Activity implements View.OnClickListener {
 
 
 
-
-
-
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, contentView,
-				HIDER_FLAGS);
+		mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
 		mSystemUiHider.setup();
-		mSystemUiHider
-		.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-			// Cached values.
-			int mControlsHeight;
-			int mShortAnimTime;
-
-			@Override
-			@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-			public void onVisibilityChange(boolean visible) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-					// If the ViewPropertyAnimator API is available
-					// (Honeycomb MR2 and later), use it to animate the
-					// in-layout UI controls at the bottom of the
-					// screen.
-					if (mControlsHeight == 0) {
-						mControlsHeight = controlsView.getHeight();
-					}
-					if (mShortAnimTime == 0) {
-						mShortAnimTime = getResources().getInteger(
-								android.R.integer.config_shortAnimTime);
-					}
-					controlsView
-					.animate()
-					.translationY(visible ? 0 : mControlsHeight)
-					.setDuration(mShortAnimTime);
-				} else {
-					// If the ViewPropertyAnimator APIs aren't
-					// available, simply show or hide the in-layout UI
-					// controls.
-					controlsView.setVisibility(visible ? View.VISIBLE
-							: View.GONE);
-				}
-
-				if (visible && AUTO_HIDE) {
-					// Schedule a hide().
-					delayedHide(AUTO_HIDE_DELAY_MILLIS);
-				}
-			}
-		});
+		mSystemUiHider.setOnVisibilityChangeListener(this);
 
 		// Set up the user interaction to manually show or hide the system UI.
 		contentView.setOnClickListener(this);
@@ -180,10 +142,17 @@ public class UilPage extends Activity implements View.OnClickListener {
 		mHideHandler.postDelayed(mHideRunnable, delayMillis);
 	}
 
+	/**
+	 * Method to implement the callback of view being clicked
+	 * 
+	 * @param view the view is being clicked
+	 * @version 1.0
+	 * @since 2014-02-28
+	 * */
 	@Override
-	public void onClick(View v) {
+	public void onClick(View view) {
 
-		switch (v.getId()) {
+		switch (view.getId()) {
 		case R.id.action_01:
 			Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			try {
@@ -199,7 +168,7 @@ public class UilPage extends Activity implements View.OnClickListener {
 				Log.e("ERROR", "Unable to launch camera: ", e); 
 			}
 			break;
-			
+
 		case R.id.fullscreen_content:
 			if (TOGGLE_ON_CLICK) {
 				mSystemUiHider.toggle();
@@ -207,9 +176,39 @@ public class UilPage extends Activity implements View.OnClickListener {
 				mSystemUiHider.show();
 			}
 			break;
-			
+
 		default:
 			break;
+		}
+	}
+
+	@Override
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	public void onVisibilityChange(boolean visible) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			// If the ViewPropertyAnimator API is available
+			// (Honeycomb MR2 and later), use it to animate the
+			// in-layout UI controls at the bottom of the
+			// screen.
+			int mControlsHeight = controlsView.getHeight();
+			int mShortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
+
+			this.controlsView
+			.animate()
+			.translationY(visible ? 0 : mControlsHeight)
+			.setDuration(mShortAnimTime);
+		} else {
+			// If the ViewPropertyAnimator APIs aren't
+			// available, simply show or hide the in-layout UI
+			// controls.
+			this.controlsView.setVisibility(visible ? View.VISIBLE
+					: View.GONE);
+		}
+
+		if (visible && AUTO_HIDE) {
+			// Schedule a hide().
+			this.delayedHide(AUTO_HIDE_DELAY_MILLIS);
 		}
 	}
 }
