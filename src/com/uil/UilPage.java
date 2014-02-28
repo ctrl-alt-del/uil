@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 
 /**
@@ -23,7 +24,7 @@ import android.widget.Button;
  * 
  * @see SystemUiHider
  */
-public class UilPage extends Activity {
+public class UilPage extends Activity implements View.OnClickListener {
 	/**
 	 * Whether or not the system UI should be auto-hidden after
 	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -52,43 +53,30 @@ public class UilPage extends Activity {
 	 */
 	private SystemUiHider mSystemUiHider;
 
+	private Activity activity;
+	private Context context;
+	private PackageManager packageManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.uil_page);
+		super.setContentView(R.layout.uil_page);
+
+		this.activity = this;
+		this.context = this.getBaseContext();
+		this.packageManager = this.context.getPackageManager();
+
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final View contentView = findViewById(R.id.fullscreen_content);
 
 		final Button openCamera = (Button) super.findViewById(R.id.action_01);
 
-		final Activity ACTIVITY = this;
-		final Context CONTEXT = this.getBaseContext();
 
 
-		openCamera.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				try {
-					PackageManager pm = CONTEXT.getPackageManager();
-
-					final ResolveInfo mInfo = pm.resolveActivity(i, 0);
-
-					Intent intent = new Intent();
-					intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
-					intent.setAction(Intent.ACTION_MAIN);
-					intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-					startActivity(intent); 
-				} catch (Exception e){ 
-					Log.e("ERROR", "Unable to launch camera: ", e); 
-				}
-			}
-		});
+		openCamera.setOnClickListener(this);
 
 
 
@@ -141,16 +129,7 @@ public class UilPage extends Activity {
 		});
 
 		// Set up the user interaction to manually show or hide the system UI.
-		contentView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (TOGGLE_ON_CLICK) {
-					mSystemUiHider.toggle();
-				} else {
-					mSystemUiHider.show();
-				}
-			}
-		});
+		contentView.setOnClickListener(this);
 
 		// Upon interacting with UI controls, delay any scheduled hide()
 		// operations to prevent the jarring behavior of controls going away
@@ -199,5 +178,38 @@ public class UilPage extends Activity {
 	private void delayedHide(int delayMillis) {
 		mHideHandler.removeCallbacks(mHideRunnable);
 		mHideHandler.postDelayed(mHideRunnable, delayMillis);
+	}
+
+	@Override
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		case R.id.action_01:
+			Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			try {
+				final ResolveInfo mInfo = this.packageManager.resolveActivity(i, 0);
+
+				Intent intent = new Intent();
+				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setAction(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+				startActivity(intent); 
+			} catch (Exception e){ 
+				Log.e("ERROR", "Unable to launch camera: ", e); 
+			}
+			break;
+			
+		case R.id.fullscreen_content:
+			if (TOGGLE_ON_CLICK) {
+				mSystemUiHider.toggle();
+			} else {
+				mSystemUiHider.show();
+			}
+			break;
+			
+		default:
+			break;
+		}
 	}
 }
