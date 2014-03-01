@@ -57,6 +57,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Open Camera" />
+        
+        <Button
+            android:id="@+id/action_02"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open Calendar" />
+        
+        <Button
+            android:id="@+id/action_03"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open Alarm" />
+        
+        <Button
+            android:id="@+id/action_04"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open Calculator" />
 
     </FrameLayout>
 

@@ -152,19 +152,72 @@ SystemUiHider.OnVisibilityChangeListener {
 	@Override
 	public void onClick(View view) {
 
+		Intent intent = new Intent();
+		
 		switch (view.getId()) {
 		case R.id.action_01:
-			Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			try {
-				final ResolveInfo mInfo = this.packageManager.resolveActivity(i, 0);
-
-				Intent intent = new Intent();
+				final ResolveInfo mInfo = this.packageManager
+						.resolveActivity(
+								new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE), 
+								0);
+				
 				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
 				intent.setAction(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-				startActivity(intent); 
-			} catch (Exception e){ 
+				super.startActivity(intent); 
+			} catch (Exception e){ //ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch camera: ", e); 
+			}
+			break;
+			
+		case R.id.action_02:
+			try {
+				final ResolveInfo mInfo = this.packageManager
+						.resolveActivity(
+								new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE), 
+								0);
+				
+				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setAction(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+				super.startActivity(intent); 
+			} catch (Exception e){ //ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch camera: ", e); 
+			}
+			break;
+			
+		case R.id.action_03:
+			try {
+				final ResolveInfo mInfo = this.packageManager
+						.resolveActivity(
+								new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE), 
+								0);
+				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setAction(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+				super.startActivity(intent); 
+			} catch (Exception e){ //ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch camera: ", e); 
+			}
+			break;
+			
+		case R.id.action_04:
+			try {
+				final ResolveInfo mInfo = this.packageManager
+						.resolveActivity(
+								new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE), 
+								0);
+				
+				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setAction(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+				super.startActivity(intent); 
+			} catch (Exception e){ //ActivityNotFoundException
 				Log.e("ERROR", "Unable to launch camera: ", e); 
 			}
 			break;
