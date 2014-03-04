@@ -51,6 +51,11 @@
                 android:text="@string/dummy_button" />
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_hright="match_parent" >
+
         <Button
             android:id="@+id/action_01"
             style="?android:attr/buttonStyleSmall"
@@ -63,13 +68,15 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Open Calendar" />
+            android:layout_below="@+id/action_01"
+            android:text="Open Calculator" />
         
         <Button
             android:id="@+id/action_03"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/action_02"
             android:text="Open Alarm" />
         
         <Button
@@ -77,7 +84,9 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Open Calculator" />
+            android:layout_below="@+id/action_03"
+            android:text="Open Calendar" />
+        </RelativeLayout>
 
     </FrameLayout>
 
