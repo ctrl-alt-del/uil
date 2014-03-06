@@ -24,9 +24,8 @@ import android.widget.Button;
  * 
  * @see SystemUiHider
  */
-public class UilPage extends Activity implements 
-View.OnClickListener,
-SystemUiHider.OnVisibilityChangeListener {
+public class UilPage extends Activity implements View.OnClickListener,
+		SystemUiHider.OnVisibilityChangeListener {
 	/**
 	 * Whether or not the system UI should be auto-hidden after
 	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -71,22 +70,25 @@ SystemUiHider.OnVisibilityChangeListener {
 		this.context = this.getBaseContext();
 		this.packageManager = this.context.getPackageManager();
 
-
 		this.controlsView = findViewById(R.id.fullscreen_content_controls);
 		this.contentView = findViewById(R.id.fullscreen_content);
 
 		final Button openCamera = (Button) super.findViewById(R.id.action_01);
-
-
-
+		final Button openCalculator = (Button) super.findViewById(R.id.action_02);
+		final Button openAlarm = (Button) super.findViewById(R.id.action_03);
+		final Button openCalendar = (Button) super.findViewById(R.id.action_04);
+		final Button openWifi = (Button) super.findViewById(R.id.action_05);
 
 		openCamera.setOnClickListener(this);
-
-
+		openCalculator.setOnClickListener(this);
+		openAlarm.setOnClickListener(this);
+		openCalendar.setOnClickListener(this);
+		openWifi.setOnClickListener(this);
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
+		mSystemUiHider = SystemUiHider.getInstance(this, contentView,
+				HIDER_FLAGS);
 		mSystemUiHider.setup();
 		mSystemUiHider.setOnVisibilityChangeListener(this);
 
@@ -145,7 +147,8 @@ SystemUiHider.OnVisibilityChangeListener {
 	/**
 	 * Method to implement the callback of view being clicked
 	 * 
-	 * @param view the view is being clicked
+	 * @param view
+	 *            the view is being clicked
 	 * @version 1.0
 	 * @since 2014-02-28
 	 * */
@@ -159,45 +162,50 @@ SystemUiHider.OnVisibilityChangeListener {
 			try {
 				final ResolveInfo mInfo = this.packageManager
 						.resolveActivity(
-								new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE), 
+								new Intent(
+										android.provider.MediaStore.ACTION_IMAGE_CAPTURE),
 								0);
 
-				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setComponent(new ComponentName(
+						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
 				intent.setAction(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-				super.startActivity(intent); 
-			} catch (Exception e){ //ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch camera: ", e); 
+				super.startActivity(intent);
+			} catch (Exception e) { // ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch: ", e);
 			}
 			break;
 
 		case R.id.action_02:
 			try {
 
-				intent.setComponent(new ComponentName("com.android.calculator2", "com.android.calculator2.Calculator"));
+				intent.setComponent(new ComponentName(
+						"com.android.calculator2",
+						"com.android.calculator2.Calculator"));
 				intent.setAction(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-				super.startActivity(intent); 
-			} catch (Exception e){ //ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch camera: ", e); 
+				super.startActivity(intent);
+			} catch (Exception e) { // ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch: ", e);
 			}
 			break;
 
 		case R.id.action_03:
 			try {
 				final ResolveInfo mInfo = this.packageManager
-						.resolveActivity(
-								new Intent(android.provider.AlarmClock.ACTION_SET_ALARM), 
+						.resolveActivity(new Intent(
+								android.provider.AlarmClock.ACTION_SET_ALARM),
 								0);
-				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setComponent(new ComponentName(
+						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
 				intent.setAction(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-				super.startActivity(intent); 
-			} catch (Exception e){ //ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch camera: ", e); 
+				super.startActivity(intent);
+			} catch (Exception e) { // ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch: ", e);
 			}
 			break;
 
@@ -205,32 +213,36 @@ SystemUiHider.OnVisibilityChangeListener {
 			try {
 				final ResolveInfo mInfo = this.packageManager
 						.resolveActivity(
-								new Intent(android.provider.CalendarContract.ACCOUNT_TYPE_LOCAL), 
+								new Intent(
+										android.provider.CalendarContract.ACCOUNT_TYPE_LOCAL),
 								0);
 
-				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setComponent(new ComponentName(
+						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
 				intent.setAction(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-				super.startActivity(intent); 
-			} catch (Exception e){ //ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch camera: ", e); 
+				super.startActivity(intent);
+			} catch (Exception e) { // ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch: ", e);
 			}
 			break;
 		case R.id.action_05:
 			try {
 				final ResolveInfo mInfo = this.packageManager
 						.resolveActivity(
-								new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS), 
+								new Intent(
+										android.provider.Settings.ACTION_WIFI_SETTINGS),
 								0);
 
-				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setComponent(new ComponentName(
+						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
 				intent.setAction(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-				super.startActivity(intent); 
-			} catch (Exception e){ //ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch camera: ", e); 
+				super.startActivity(intent);
+			} catch (Exception e) { // ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch: ", e);
 			}
 			break;
 
@@ -259,16 +271,14 @@ SystemUiHider.OnVisibilityChangeListener {
 			int mShortAnimTime = getResources().getInteger(
 					android.R.integer.config_shortAnimTime);
 
-			this.controlsView
-			.animate()
-			.translationY(visible ? 0 : mControlsHeight)
-			.setDuration(mShortAnimTime);
+			this.controlsView.animate()
+					.translationY(visible ? 0 : mControlsHeight)
+					.setDuration(mShortAnimTime);
 		} else {
 			// If the ViewPropertyAnimator APIs aren't
 			// available, simply show or hide the in-layout UI
 			// controls.
-			this.controlsView.setVisibility(visible ? View.VISIBLE
-					: View.GONE);
+			this.controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
 		}
 
 		if (visible && AUTO_HIDE) {
