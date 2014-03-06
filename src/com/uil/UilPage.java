@@ -217,6 +217,22 @@ SystemUiHider.OnVisibilityChangeListener {
 				Log.e("ERROR", "Unable to launch camera: ", e); 
 			}
 			break;
+		case R.id.action_05:
+			try {
+				final ResolveInfo mInfo = this.packageManager
+						.resolveActivity(
+								new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS), 
+								0);
+
+				intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+				intent.setAction(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+				super.startActivity(intent); 
+			} catch (Exception e){ //ActivityNotFoundException
+				Log.e("ERROR", "Unable to launch camera: ", e); 
+			}
+			break;
 
 		case R.id.fullscreen_content:
 			if (TOGGLE_ON_CLICK) {

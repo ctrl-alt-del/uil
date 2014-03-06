@@ -86,6 +86,15 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/action_03"
             android:text="Open Calendar" />
+        
+        <Button
+            android:id="@+id/action_05"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/action_04"
+            android:text="Open Wifi" />
+        
         </RelativeLayout>
 
     </FrameLayout>
