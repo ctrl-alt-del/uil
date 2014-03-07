@@ -1,5 +1,8 @@
 package com.uil;
 
+import java.util.List;
+
+import com.uil.util.SysUtil;
 import com.uil.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -7,6 +10,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
@@ -17,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -25,7 +30,7 @@ import android.widget.Button;
  * @see SystemUiHider
  */
 public class UilPage extends Activity implements View.OnClickListener,
-		SystemUiHider.OnVisibilityChangeListener {
+SystemUiHider.OnVisibilityChangeListener {
 	/**
 	 * Whether or not the system UI should be auto-hidden after
 	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -73,17 +78,22 @@ public class UilPage extends Activity implements View.OnClickListener,
 		this.controlsView = findViewById(R.id.fullscreen_content_controls);
 		this.contentView = findViewById(R.id.fullscreen_content);
 
+		final Button openDummy = (Button) super.findViewById(R.id.dummy_button);
 		final Button openCamera = (Button) super.findViewById(R.id.action_01);
 		final Button openCalculator = (Button) super.findViewById(R.id.action_02);
 		final Button openAlarm = (Button) super.findViewById(R.id.action_03);
 		final Button openCalendar = (Button) super.findViewById(R.id.action_04);
 		final Button openWifi = (Button) super.findViewById(R.id.action_05);
+		final Button showAllPackages = (Button) super.findViewById(R.id.action_06);
 
+
+		openDummy.setOnClickListener(this);
 		openCamera.setOnClickListener(this);
 		openCalculator.setOnClickListener(this);
 		openAlarm.setOnClickListener(this);
 		openCalendar.setOnClickListener(this);
 		openWifi.setOnClickListener(this);
+		showAllPackages.setOnClickListener(this);
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
@@ -156,6 +166,7 @@ public class UilPage extends Activity implements View.OnClickListener,
 	public void onClick(View view) {
 
 		Intent intent = new Intent();
+		String appName = "";
 
 		switch (view.getId()) {
 		case R.id.action_01:
@@ -164,7 +175,7 @@ public class UilPage extends Activity implements View.OnClickListener,
 						.resolveActivity(
 								new Intent(
 										android.provider.MediaStore.ACTION_IMAGE_CAPTURE),
-								0);
+										0);
 
 				intent.setComponent(new ComponentName(
 						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
@@ -178,17 +189,14 @@ public class UilPage extends Activity implements View.OnClickListener,
 			break;
 
 		case R.id.action_02:
-			try {
-
-				intent.setComponent(new ComponentName(
-						"com.android.calculator2",
-						"com.android.calculator2.Calculator"));
-				intent.setAction(Intent.ACTION_MAIN);
+			appName = "com.sec.android.app.popupcalculator";
+			intent = this.getPackageManager().getLaunchIntentForPackage(appName);
+			if (intent != null) {
 				intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
 				super.startActivity(intent);
-			} catch (Exception e) { // ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch: ", e);
+				//					throw new PackageManager.NameNotFoundException();
+			} else {
+				Toast.makeText(context, "the package is not installed", Toast.LENGTH_LONG).show();
 			}
 			break;
 
@@ -210,12 +218,23 @@ public class UilPage extends Activity implements View.OnClickListener,
 			break;
 
 		case R.id.action_04:
+			appName = "com.android.calendar";
+			intent = this.getPackageManager().getLaunchIntentForPackage(appName);
+			if (intent != null) {
+				intent.addCategory(Intent.CATEGORY_LAUNCHER);
+				super.startActivity(intent);
+				//					throw new PackageManager.NameNotFoundException();
+			} else {
+				Toast.makeText(context, "the package is not installed", Toast.LENGTH_LONG).show();
+			}
+			break;
+		case R.id.action_05:
 			try {
 				final ResolveInfo mInfo = this.packageManager
 						.resolveActivity(
 								new Intent(
-										android.provider.CalendarContract.ACCOUNT_TYPE_LOCAL),
-								0);
+										android.provider.Settings.ACTION_WIFI_SETTINGS),
+										0);
 
 				intent.setComponent(new ComponentName(
 						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
@@ -227,23 +246,23 @@ public class UilPage extends Activity implements View.OnClickListener,
 				Log.e("ERROR", "Unable to launch: ", e);
 			}
 			break;
-		case R.id.action_05:
-			try {
-				final ResolveInfo mInfo = this.packageManager
-						.resolveActivity(
-								new Intent(
-										android.provider.Settings.ACTION_WIFI_SETTINGS),
-								0);
-
-				intent.setComponent(new ComponentName(
-						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
-				intent.setAction(Intent.ACTION_MAIN);
-				intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-				super.startActivity(intent);
-			} catch (Exception e) { // ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch: ", e);
+		case R.id.action_06:
+			for (String name : SysUtil.listAllPackages(this)) {
+				Log.e("---> ", "---> " + name);
 			}
+			break;
+		case R.id.dummy_button:
+			
+			appName = "com.skype.raider";
+			intent = this.getPackageManager().getLaunchIntentForPackage(appName);
+			if (intent != null) {
+				intent.addCategory(Intent.CATEGORY_LAUNCHER);
+				super.startActivity(intent);
+				//					throw new PackageManager.NameNotFoundException();
+			} else {
+				Toast.makeText(context, "the package is not installed", Toast.LENGTH_LONG).show();
+			}
+
 			break;
 
 		case R.id.fullscreen_content:
@@ -272,8 +291,8 @@ public class UilPage extends Activity implements View.OnClickListener,
 					android.R.integer.config_shortAnimTime);
 
 			this.controlsView.animate()
-					.translationY(visible ? 0 : mControlsHeight)
-					.setDuration(mShortAnimTime);
+			.translationY(visible ? 0 : mControlsHeight)
+			.setDuration(mShortAnimTime);
 		} else {
 			// If the ViewPropertyAnimator APIs aren't
 			// available, simply show or hide the in-layout UI
