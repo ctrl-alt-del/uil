@@ -1,5 +1,6 @@
 package com.uil;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.uil.util.SysUtil;
@@ -13,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +22,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 /**
@@ -29,7 +35,8 @@ import android.widget.Toast;
  * 
  * @see SystemUiHider
  */
-public class UilPage extends Activity implements View.OnClickListener,
+public class UilPage extends Activity implements 
+View.OnClickListener,
 SystemUiHider.OnVisibilityChangeListener {
 	/**
 	 * Whether or not the system UI should be auto-hidden after
@@ -64,6 +71,7 @@ SystemUiHider.OnVisibilityChangeListener {
 	private PackageManager packageManager;
 
 	private View controlsView, contentView;
+	private LinkedList<String> packages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +93,10 @@ SystemUiHider.OnVisibilityChangeListener {
 		final Button openCalendar = (Button) super.findViewById(R.id.action_04);
 		final Button openWifi = (Button) super.findViewById(R.id.action_05);
 		final Button showAllPackages = (Button) super.findViewById(R.id.action_06);
+		final ListView packageList = (ListView) super.findViewById(R.id.package_list);
 
-
+		this.packages = SysUtil.listAllPackages(this);
+		
 		openDummy.setOnClickListener(this);
 		openCamera.setOnClickListener(this);
 		openCalculator.setOnClickListener(this);
@@ -94,6 +104,8 @@ SystemUiHider.OnVisibilityChangeListener {
 		openCalendar.setOnClickListener(this);
 		openWifi.setOnClickListener(this);
 		showAllPackages.setOnClickListener(this);
+		packageList.setAdapter(new ArrayAdapter<String>(this,
+		        android.R.layout.simple_list_item_1, packages));
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
