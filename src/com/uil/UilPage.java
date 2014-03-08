@@ -104,8 +104,9 @@ SystemUiHider.OnVisibilityChangeListener {
 		openCalendar.setOnClickListener(this);
 		openWifi.setOnClickListener(this);
 		showAllPackages.setOnClickListener(this);
-		packageList.setAdapter(new ArrayAdapter<String>(this,
-		        android.R.layout.simple_list_item_1, packages));
+//		packageList.setAdapter(new ArrayAdapter<String>(this,
+//		        android.R.layout.simple_list_item_1, packages));
+		packageList.setAdapter(new PackageListAdapter(this));
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
