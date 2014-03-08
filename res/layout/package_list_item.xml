@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="100dp"
+    android:background="#9F9F9F" >
+    
+    <ImageView
+        android:id="@+id/imageViewOfApplicationIcon"
+        android:layout_width="70dp"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:background="#ffffff" />
+
+
+    <TextView
+        android:id="@+id/textViewOfApplicationName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageViewOfApplicationIcon"
+        android:layout_toRightOf="@+id/imageViewOfApplicationIcon"
+        android:layout_marginLeft="20dp"
+        android:text="Application Name"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/textViewOfPackageName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageViewOfApplicationIcon"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:text="Package Name"
+        android:textColor="#000000"
+        android:textSize="14dp"
+        android:textStyle="italic" />
+
+</RelativeLayout>
