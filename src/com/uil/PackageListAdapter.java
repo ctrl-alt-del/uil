@@ -33,7 +33,7 @@ public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 
 	private final Activity activity;
 	private final Context context;
-	private LinkedList<String> content;
+	private LinkedList<String> contents;
 	private final PackageManager packageManager;
 
 
@@ -41,17 +41,29 @@ public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 		this.activity = activity;
 		this.context = activity.getBaseContext();
 		this.packageManager = activity.getPackageManager();
-		this.content = SysUtil.listAllPackages(activity);
+		this.contents = SysUtil.listAllPackages(activity);
+		
+		LinkedList<String> toBeRemoved = new LinkedList<String>();
+		for (String content : contents) {
+			if (!content.contains("skype") && 
+					!content.contains("yelp") && 
+					!content.contains("calculator") && 
+					!content.contains("setting") && 
+					!content.contains("googleplay")) {
+				toBeRemoved.add(content);
+			}
+		}
+		this.contents.removeAll(toBeRemoved);
 	}
 
 	@Override
 	public int getCount() {
-		return this.content.size();
+		return this.contents.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return this.content.get(position);
+		return this.contents.get(position);
 	}
 
 	@Override
@@ -83,13 +95,13 @@ public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 
 		convertView.setBackgroundColor(Color.rgb(red, green, blue));
 
-		item.getNameOfPackage().setText((String) this.content.get(position));
+		item.getNameOfPackage().setText((String) this.contents.get(position));
 
 		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
 				Log.e("-->", "position: " + v.getId());
-				String appName = content.get(v.getId());
+				String appName = contents.get(v.getId());
 				Log.e("-->", "appName: " + appName);
 				Intent intent = packageManager.getLaunchIntentForPackage(appName);
 
