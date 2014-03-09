@@ -14,11 +14,13 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 
 /**
@@ -29,10 +31,10 @@ import android.widget.Toast;
  * */
 public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 
-	private Activity activity;
-	private Context context;
+	private final Activity activity;
+	private final Context context;
 	private LinkedList<String> content;
-	private PackageManager packageManager;
+	private final PackageManager packageManager;
 
 
 	public PackageListAdapter(Activity activity) {
@@ -60,42 +62,37 @@ public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 
 		PackageItem item;
-		
-		if (convertView != null) {
-			item = (PackageItem) convertView.getTag();
-		} else {
+		if (convertView == null) {
 			convertView = View.inflate(this.context, R.layout.package_list_item, null);
-
 			item = new PackageItem().setNameOfPackage((TextView) convertView.findViewById(R.id.textViewOfApplicationName));
-
-			convertView.setTag(item);
-			convertView.setId(position);
-
-			int min = 0;
-			int max = 255;
-
-			Random r = new Random();
-			int red = r.nextInt(max - min + 1) + min;
-			int green = r.nextInt(max - min + 1) + min;
-			int blue = r.nextInt(max - min + 1) + min;
-
-			convertView.setBackgroundColor(Color.rgb(red, green, blue));
+		} else {
+			item = (PackageItem) convertView.getTag();
 		}
-		
+
+		convertView.setTag(item);
+		convertView.setId(position);
+
+		int min = 0;
+		int max = 255;
+		Random r = new Random();
+		int red = r.nextInt(max - min + 1) + min;
+		int green = r.nextInt(max - min + 1) + min;
+		int blue = r.nextInt(max - min + 1) + min;
+
+		convertView.setBackgroundColor(Color.rgb(red, green, blue));
+
 		item.getNameOfPackage().setText((String) this.content.get(position));
-		
-		
+
 		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				Log.e("-->", "position: " + v.getId());
 				String appName = content.get(v.getId());
 				Log.e("-->", "appName: " + appName);
 				Intent intent = packageManager.getLaunchIntentForPackage(appName);
-				
+
 				if (intent != null) {
 					intent.addCategory(Intent.CATEGORY_LAUNCHER);
 					activity.startActivity(intent);
@@ -105,15 +102,8 @@ public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 				}
 			}
 		});
-		
-		
-		
-		
-
 		return convertView;
 	}
-
-
 
 	private class PackageItem {
 
@@ -174,5 +164,4 @@ public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 			return this;
 		}
 	}
-
 }
