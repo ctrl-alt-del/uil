@@ -1,7 +1,6 @@
 package com.uil;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import com.uil.util.SysUtil;
@@ -14,13 +13,11 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 
 /**
@@ -108,9 +105,13 @@ public class PackageListAdapter extends BaseAdapter implements ListAdapter {
 				if (intent != null) {
 					intent.addCategory(Intent.CATEGORY_LAUNCHER);
 					activity.startActivity(intent);
-					//					throw new PackageManager.NameNotFoundException();
 				} else {
 					Toast.makeText(context, "the package is not installed", Toast.LENGTH_LONG).show();
+
+					// intent to google play
+					intent = packageManager.getLaunchIntentForPackage("com.android.vending");
+					intent.addCategory(Intent.CATEGORY_LAUNCHER);
+					activity.startActivity(intent);
 				}
 			}
 		});
