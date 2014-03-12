@@ -63,54 +63,36 @@
             android:text="Open Camera" />
         
         <Button
-            android:id="@+id/action_03"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/action_02"
-            android:text="Open Alarm" />
-        
-        <Button
-            android:id="@+id/action_05"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/action_04"
-            android:text="Open Wifi" />
-
-        <Button
             android:id="@+id/action_02"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:text="Open Calculator" />
-
+            android:text="Open Calendar" />
+        
+         <Button
+            android:id="@+id/action_03"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/action_01"
+            android:layout_alignParentRight="true"
+            android:text="Open Alarm" />
+        
         <Button
             android:id="@+id/action_04"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_below="@+id/action_02"
-            android:text="Open Calendar" />
-
-        <Button
-            android:id="@+id/action_06"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/action_04"
-            android:text="Show all packages" />
+            android:text="Open Wifi" />
 
         <ListView
             android:id="@+id/package_list"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/action_05"
+            android:layout_below="@+id/action_04"
             android:layout_marginTop="20dp" >
         </ListView>
         

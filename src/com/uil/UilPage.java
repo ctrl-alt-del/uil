@@ -1,8 +1,5 @@
 package com.uil;
 
-import java.util.LinkedList;
-
-import com.uil.util.SysUtil;
 import com.uil.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -64,7 +61,6 @@ SystemUiHider.OnVisibilityChangeListener {
 	private PackageManager packageManager;
 
 	private View controlsView, contentView;
-	private LinkedList<String> packages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,19 +80,13 @@ SystemUiHider.OnVisibilityChangeListener {
 		final Button openCalculator = (Button) super.findViewById(R.id.action_02);
 		final Button openAlarm = (Button) super.findViewById(R.id.action_03);
 		final Button openCalendar = (Button) super.findViewById(R.id.action_04);
-		final Button openWifi = (Button) super.findViewById(R.id.action_05);
-		final Button showAllPackages = (Button) super.findViewById(R.id.action_06);
 		final ListView packageList = (ListView) super.findViewById(R.id.package_list);
 
-		this.packages = SysUtil.listAllPackages(this);
-		
 		openDummy.setOnClickListener(this);
 		openCamera.setOnClickListener(this);
 		openCalculator.setOnClickListener(this);
 		openAlarm.setOnClickListener(this);
 		openCalendar.setOnClickListener(this);
-		openWifi.setOnClickListener(this);
-		showAllPackages.setOnClickListener(this);
 //		packageList.setAdapter(new ArrayAdapter<String>(this,
 //		        android.R.layout.simple_list_item_1, packages));
 		packageList.setAdapter(new PackageListAdapter(this));
@@ -232,29 +222,6 @@ SystemUiHider.OnVisibilityChangeListener {
 				//					throw new PackageManager.NameNotFoundException();
 			} else {
 				Toast.makeText(context, "the package is not installed", Toast.LENGTH_LONG).show();
-			}
-			break;
-		case R.id.action_05:
-			try {
-				final ResolveInfo mInfo = this.packageManager
-						.resolveActivity(
-								new Intent(
-										android.provider.Settings.ACTION_WIFI_SETTINGS),
-										0);
-
-				intent.setComponent(new ComponentName(
-						mInfo.activityInfo.packageName, mInfo.activityInfo.name));
-				intent.setAction(Intent.ACTION_MAIN);
-				intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-				super.startActivity(intent);
-			} catch (Exception e) { // ActivityNotFoundException
-				Log.e("ERROR", "Unable to launch: ", e);
-			}
-			break;
-		case R.id.action_06:
-			for (String name : SysUtil.listAllPackages(this)) {
-				Log.e("---> ", "---> " + name);
 			}
 			break;
 		case R.id.dummy_button:
